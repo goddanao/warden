@@ -1,11 +1,33 @@
 version: "3.5"
 services:
+
   nginx:
+    image: god:nginx
+    # volumes:
+      # - .warden/nginx/available.d/hyperf.conf:/etc/nginx/available.d/hyperf.conf
+      # - ../../sencha/resources:/workspace
     environment:
+      - NGINX_ROOT=/var/www/html
       - NGINX_PUBLIC=/public
       - NGINX_TEMPLATE=hyperf.conf
 
+  db:
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
+      - --explicit_defaults_for_timestamp=on
+      - --secure-file-priv=/tmp
+    volumes:
+      - /tmp:/tmp
+      - ${WARDEN_DIR}/environments/hyperf/config/mysql/protect-home.conf:/etc/systemd/system/mariadb.service.d/protect-home.conf:ro
+
   php-fpm:
+    image: god:php81
+    command: php -d swoole.use_shortname=off bin/hyperf.php start
+    volumes:
+      - /tmp:/tmp
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - $HOME/.composer:/root/.composer
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.tls=true
@@ -16,3 +38,14 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.service=${WARDEN_ENV_NAME}-livereload
       - traefik.http.services.${WARDEN_ENV_NAME}-livereload.loadbalancer.server.port=35729
       - traefik.docker.network=${WARDEN_ENV_NAME}_default
+
+  php-debug:
+    image: god:php81
+    command: php -e -d swoole.use_shortname=off bin/hyperf.php start
+    environment:
+      - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
+    volumes:
+      - /tmp:/tmp
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${WARDEN_DIR}/environments/hyperf/config/php/debug-xdebug3.ini:/usr/local/etc/php/conf.d/docker-php-ext-debug.ini
+      # - $HOME/.composer:/root/.composer
