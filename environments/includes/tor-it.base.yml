@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  tor-it:
+    image: god:tor
+    container_name: "${WARDEN_ENV_NAME}-tor-it"
+    hostname: "${WARDEN_ENV_NAME}-tor-it"
+    environment:
+      - tors=10
+      - privoxy=1
+      - regions={it}
+    #      - new_circuit_period=1
+    #      - max_circuit_dirtiness=1
+    #      - circuit_build_timeout=120

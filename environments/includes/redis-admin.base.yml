@@ -1,0 +1,16 @@
+version: "3.5"
+services:
+  redis-admin:
+    image: rediscommander/redis-commander
+    container_name: "${WARDEN_ENV_NAME}-redis-admin"
+    hostname: "${WARDEN_ENV_NAME}-redis-admin"
+    environment:
+      - REDIS_HOSTS=redis:${WARDEN_ENV_NAME}-redis:6379:0,redis:${WARDEN_ENV_NAME}-redis:6379:1,redis:${WARDEN_ENV_NAME}-redis:6379:2,redis:${WARDEN_ENV_NAME}-redis:6379:3,redis:${WARDEN_ENV_NAME}-redis:6379:4,redis:${WARDEN_ENV_NAME}-redis:6379:5,redis:${WARDEN_ENV_NAME}-redis:6379:6,redis:${WARDEN_ENV_NAME}-redis:6379:7,redis:${WARDEN_ENV_NAME}-redis:6379:8,redis:${WARDEN_ENV_NAME}-redis:6379:9
+    depends_on:
+      - redis
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-redis-admin.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-redis-admin.rule=Host(`redis-admin.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-redis-admin.loadbalancer.server.port=8081
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default

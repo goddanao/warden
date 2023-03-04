@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  db:
+    image: docker.io/wardenenv/mariadb:10.9
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-hyperf}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-hyperf}
+      - MYSQL_USER=${MYSQL_USER:-hyperf}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-hyperf}
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
+      - --explicit_defaults_for_timestamp=on

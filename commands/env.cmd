@@ -92,6 +92,21 @@ fi
 [[ ${WARDEN_REDIS} -eq 1 ]] \
     && appendEnvPartialIfExists "redis"
 
+[[ ${WARDEN_REDIS_ADMIN} -eq 1 ]] \
+    && appendEnvPartialIfExists "redis-admin"
+
+[[ ${WARDEN_MONGO} -eq 1 ]] \
+    && appendEnvPartialIfExists "mongo"
+
+[[ ${WARDEN_MONGO_EXPRESS} -eq 1 ]] \
+    && appendEnvPartialIfExists "mongo-express"
+
+[[ ${WARDEN_TOR} -eq 1 ]] \
+    && appendEnvPartialIfExists "tor"
+
+[[ ${WARDEN_TOR_IT} -eq 1 ]] \
+    && appendEnvPartialIfExists "tor-it"
+
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
