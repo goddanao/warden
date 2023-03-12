@@ -1,0 +1,17 @@
+version: "3.5"
+services:
+  sencha-watch:
+    image: god:sencha-cmd
+    command: webpack-dev-server --env profile=desktop --env browser=yes --env verbose=no
+    volumes:
+      - .${WARDEN_WEB_ROOT:-}/:/app
+      - ${SCRIPT_HOME}/..:/workspace
+      - ${SCRIPT_HOME}/../sencha/resources/packages/local:/app/javascript/sencha/packages/local:ro
+      - ${SCRIPT_HOME}/runtime/cache:/cache
+    working_dir: /app/javascript/sencha
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-sencha.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-sencha.rule=Host(`sencha.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-sencha.loadbalancer.server.port=1962
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default

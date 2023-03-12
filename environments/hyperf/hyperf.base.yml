@@ -22,12 +22,11 @@ services:
       - ${WARDEN_DIR}/environments/hyperf/config/mysql/protect-home.conf:/etc/systemd/system/mariadb.service.d/protect-home.conf:ro
 
   php-fpm:
-    image: god:php81
+    image: god:php82
     command: php -d swoole.use_shortname=off bin/hyperf.php start
     volumes:
       - /tmp:/tmp
       - /var/run/docker.sock:/var/run/docker.sock
-      # - $HOME/.composer:/root/.composer
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.tls=true
@@ -40,12 +39,11 @@ services:
       - traefik.docker.network=${WARDEN_ENV_NAME}_default
 
   php-debug:
-    image: god:php81
-    command: php -e -d swoole.use_shortname=off bin/hyperf.php start
+    image: god:php82
+    # command: php -e -d swoole.use_shortname=off bin/hyperf.php start
     environment:
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     volumes:
       - /tmp:/tmp
       - /var/run/docker.sock:/var/run/docker.sock
       - ${WARDEN_DIR}/environments/hyperf/config/php/debug-xdebug3.ini:/usr/local/etc/php/conf.d/docker-php-ext-debug.ini
-      # - $HOME/.composer:/root/.composer

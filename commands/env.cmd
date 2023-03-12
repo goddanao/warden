@@ -107,6 +107,9 @@ fi
 [[ ${WARDEN_TOR_IT} -eq 1 ]] \
     && appendEnvPartialIfExists "tor-it"
 
+[[ ${WARDEN_SENCHA} -eq 1 ]] \
+    && appendEnvPartialIfExists "sencha"
+
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
