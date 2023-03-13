@@ -3,9 +3,6 @@ services:
 
   nginx:
     image: god:nginx
-    # volumes:
-      # - .warden/nginx/available.d/hyperf.conf:/etc/nginx/available.d/hyperf.conf
-      # - ../../sencha/resources:/workspace
     environment:
       - NGINX_ROOT=/var/www/html
       - NGINX_PUBLIC=/public
@@ -27,6 +24,7 @@ services:
     volumes:
       - /tmp:/tmp
       - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/.composer:/root/.composer
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.tls=true

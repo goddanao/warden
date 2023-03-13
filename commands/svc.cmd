@@ -38,6 +38,13 @@ if [[ "${WARDEN_PORTAINER_ENABLE}" == 1 ]]; then
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.portainer.yml")
 fi
 
+## add satis docker-compose
+WARDEN_SATIS_ENABLE="${WARDEN_SATIS_ENABLE:-1}"
+if [[ "$WARDEN_SATIS_ENABLE" == "1" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.satis.yml")
+fi
+
 ## allow an additional docker-compose file to be loaded for global services
 if [[ -f "${WARDEN_HOME_DIR}/docker-compose.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
