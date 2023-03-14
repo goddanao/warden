@@ -43,6 +43,9 @@ WARDEN_SATIS_ENABLE="${WARDEN_SATIS_ENABLE:-1}"
 if [[ "$WARDEN_SATIS_ENABLE" == "1" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.satis.yml")
+
+    ## Aggiunge Satis all'elenco dei servizi globali da proiettare nella rete del progetto
+    DOCKER_PEERED_SERVICES+=("satis")
 fi
 
 ## allow an additional docker-compose file to be loaded for global services

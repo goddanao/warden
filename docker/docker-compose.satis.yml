@@ -8,8 +8,8 @@ services:
     volumes:
       - ${HOME}/.ssh/id_rsa:/var/tmp/id
       - ${HOME}/.ssh/config:/var/tmp/sshconf
-      - satisconfig:/var/www/.composer
       - ${HOME}/.composer:/composer
+      - satisconfig:/var/www/.composer
       - satisweb:/satisfy/web
     environment:
       PRIVATE_REPO_DOMAIN_LIST: bitbucket.org gitlab.com github.com
