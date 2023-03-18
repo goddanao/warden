@@ -151,15 +151,13 @@ else
     export WARDEN_SELENIUM_DEBUG=
 fi
 
+if [[ "$WARDEN_SATIS_ENABLE" == "1" ]]; then
+    ## Aggiunge Satis all'elenco dei servizi globali da proiettare nella rete del progetto
+    DOCKER_PEERED_SERVICES+=("satis")
+fi
+
 ## disconnect peered service containers from environment network
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
-
-    if [[ "$WARDEN_SATIS_ENABLE" == "1" ]]; then
-
-        ## Aggiunge Satis all'elenco dei servizi globali da proiettare nella rete del progetto
-        DOCKER_PEERED_SERVICES+=("satis")
-    fi
-
     disconnectPeeredServices "$(renderEnvNetworkName)"
 fi
 
