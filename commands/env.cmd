@@ -110,6 +110,9 @@ fi
 [[ ${WARDEN_SENCHA} -eq 1 ]] \
     && appendEnvPartialIfExists "sencha"
 
+[[ ${WARDEN_NGROK} -eq 1 ]] \
+    && appendEnvPartialIfExists "ngrok"
+
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
