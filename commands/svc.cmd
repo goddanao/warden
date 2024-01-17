@@ -6,13 +6,13 @@ assertWardenInstall
 assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
-  warden svc --help || exit $? && exit $?
+  $WARDEN_BIN svc --help || exit $? && exit $?
 fi
 
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
-## configure docker-compose files
+## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
 DOCKER_COMPOSE_ARGS+=("-f")
@@ -64,7 +64,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     WARDEN_SERVICE_DOMAIN="${WARDEN_SERVICE_DOMAIN:-warden.test}"
     if [[ ! -f "${WARDEN_SSL_DIR}/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem" ]]; then
-        "${WARDEN_DIR}/bin/warden" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
+        "$WARDEN_BIN" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
     fi
 
     ## copy configuration files into location where they'll be mounted into containers from
@@ -76,9 +76,9 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 		tls:
 		  stores:
 		    default:
-		    defaultCertificate:
-		      certFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem
-		      keyFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.key.pem
+		      defaultCertificate:
+		        certFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem
+		        keyFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.key.pem
 		  certificates:
 	EOT
 
@@ -96,8 +96,8 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     fi
 fi
 
-## pass ochestration through to docker-compose
-WARDEN_SERVICE_DIR=${WARDEN_DIR} docker-compose \
+## pass ochestration through to docker compose
+WARDEN_SERVICE_DIR=${WARDEN_DIR} ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_HOME_DIR}" -p warden \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
